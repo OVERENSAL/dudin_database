@@ -21,15 +21,15 @@ PRIMARY KEY (id_telephone_number_user)
 )
 GO
 
-INSERT INTO TelephoneNumberUser VALUES(0, 'Anton', 'Fecalis', 1, 12-04-2088-12-00-00);
-INSERT INTO TelephoneNumberUser VALUES(1, 'Misha', 'Ducalis', 1, 18-12-1988-12-00-00);
-INSERT INTO TelephoneNumberUser VALUES(2, 'Anya', 'Kurich', 1, 28-11-1958-12-00-00);
-INSERT INTO TelephoneNumberUser VALUES(3, 'Omae Va', 'Mu', 1, 21-12-2020-12-00-00);
-INSERT INTO TelephoneNumberUser VALUES(4, 'Mers', 'BNW', 1, 28-12-1989-12-00-00);
-INSERT INTO TelephoneNumberUser VALUES(5, 'BNW', 'M5', 1, 28-12-1968-12-00-00);
-INSERT INTO TelephoneNumberUser VALUES(6, 'Denis', 'Suhachyov', 1, 12-12-1995-12-00-00);
-INSERT INTO TelephoneNumberUser VALUES(7, 'Sasha', 'Citines', 1, 28-04-2188-12-00-00);
-INSERT INTO TelephoneNumberUser VALUES(8, 'Sashok', 'Mayonez', 1, 22-08-1488-12-00-00);
+INSERT INTO TelephoneNumberUser VALUES(0, 'Anton', 'Fecalis', 1, '2015-12-25T15:32:06.427');
+INSERT INTO TelephoneNumberUser VALUES(1, 'Misha', 'Ducalis', 1, '2014-12-25T15:32:06.427');
+INSERT INTO TelephoneNumberUser VALUES(2, 'Anya', 'Kurich', 0, '2013-11-25T15:32:06.427');
+INSERT INTO TelephoneNumberUser VALUES(3, 'Omae Va', 'Mu', 1, '2015-10-23T15:32:06.427');
+INSERT INTO TelephoneNumberUser VALUES(4, 'Mers', 'BNW', 1, '2005-12-25T15:42:02.427');
+INSERT INTO TelephoneNumberUser VALUES(5, 'BNW', 'M5', 1, '1995-12-25T15:32:06.427');
+INSERT INTO TelephoneNumberUser VALUES(6, 'Denis', 'Suhachyov', 1, '1985-12-25T14:32:06.427');
+INSERT INTO TelephoneNumberUser VALUES(7, 'Sasha', 'Citines', 1, '1923-12-15T15:32:06.427');
+INSERT INTO TelephoneNumberUser VALUES(8, 'Sashok', 'Mayonez', 1, '2005-02-31T15:32:06.427');
 
 
 CREATE TABLE TelephoneNumber (
@@ -93,23 +93,23 @@ GO
 ---- 4.2 Со всеми атрибутами (SELECT * FROM...)
 		SELECT * FROM TelephoneNumber;
 ---- 4.3 С условием по атрибуту (SELECT * FROM ... WHERE atr1 = "")
-		SELECT * FROM TelephoneNumber WHERE id_phone_number = 0;
+		SELECT * FROM TelephoneNumber WHERE id_telephone_number = 0;
 
 -- 5. SELECT ORDER BY + TOP (LIMIT)
 ---- 5.1 С сортировкой по возрастанию ASC + ограничение вывода количества записей
 		SELECT TOP 3 * FROM TelephoneNumberUser ORDER BY f_name ASC;
 ---- 5.2 С сортировкой по убыванию DESC
-		SELECT TOP 3 * FROM TelephoneNumberUser ORDER BY f_name DESC;
+		SELECT * FROM TelephoneNumberUser ORDER BY f_name DESC;
 ---- 5.3 С сортировкой по двум атрибутам + ограничение вывода количества записей
 		SELECT TOP 3 * FROM TelephoneNumberUser ORDER BY f_name, l_name DESC;
 ---- 5.4 С сортировкой по первому атрибуту, из списка извлекаемых
-		SELECT TOP 3 * FROM TelephoneNumberUser ORDER BY gender;
+		SELECT * FROM TelephoneNumberUser ORDER BY f_name
 
 -- 6. Работа с датами. Необходимо, чтобы одна из таблиц содержала атрибут с типом DATETIME.
 ---- 6.1 WHERE по дате
-		SELECT * FROM TelephoneNumberUser WHERE date_of_birth = '01/05/2020 13:40:54';
+		SELECT * FROM TelephoneNumberUser WHERE date_of_birth = '2015-12-25T15:32:06.427';
 ---- 6.2 Извлечь из таблицы не всю дату, а только год. Например, год рождения автора.
-		SELECT date_of_birth, YEAR(date_of_birth) AS year_of_birth FROM TelephoneNumberUser;
+		SELECT YEAR(date_of_birth) AS year_of_birth FROM TelephoneNumberUser;
 
 -- 7. SELECT GROUP BY с функциями агрегации
 ----7.1 MIN
@@ -125,9 +125,9 @@ GO
 
 -- 8. SELECT GROUP BY + HAVING
 ----8.1 Написать 3 разных запроса с использованием GROUP BY + HAVING
-		SELECT f_name FROM TelephoneNumberUser GROUP BY f_name HAVING MAX(id_telephone_number_user) > 30;
-		SELECT f_name FROM TelephoneNumberUser GROUP BY f_name HAVING SUM(id_telephone_number_user) > 2;
-		SELECT f_name FROM TelephoneNumberUser GROUP BY f_name HAVING AVG(id_telephone_number_user) > 27;
+		SELECT f_name, MAX(id_telephone_number_user) AS max_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name HAVING MAX(id_telephone_number_user) > 30;
+		SELECT f_name, SUM(id_telephone_number_user) AS sum_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name HAVING SUM(id_telephone_number_user) > 2;
+		SELECT f_name, AVG(id_telephone_number_user) AS avg_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name HAVING AVG(id_telephone_number_user) >= 27;
 
 -- 9. SELECT JOIN
 ---- 9.1 LEFT JOIN двух таблиц и WHERE по одному из атрибутов
@@ -135,18 +135,18 @@ GO
 ---- 9.2 RIGHT JOIN. Получить такую же выборку, как и в 5.1
 		SELECT * FROM TelephoneNumber RIGHT JOIN TelephoneNumberUser ON TelephoneNumberUser.id_telephone_number_user = TelephoneNumber.id_telephone_number_user WHERE l_name = 'BNW';
 ---- 9.3 LEFT JOIN трех таблиц + WHERE по атрибуту из каждой таблицы
-		SELECT TelephoneNumberUser.id_telephone_number_user, TelephoneNumberUser.f_name, TelephoneNumber.id_telephone_number, TelephoneNumber.tariff, Payment.id_payment, Payment.date
+		SELECT TelephoneNumberUser.id_telephone_number_user, TelephoneNumberUser.f_name, TelephoneNumberUser.gender, TelephoneNumber.id_telephone_number, TelephoneNumber.tariff, Payment.id_payment, Payment.date
 		FROM
 				TelephoneNumberUser LEFT JOIN TelephoneNumber ON TelephoneNumberUser.id_telephone_number_user = TelephoneNumber.id_telephone_number_user LEFT JOIN Payment ON TelephoneNumberUser.id_telephone_number_user = TelephoneNumber.id_telephone_number
-        WHERE TelephoneNumberUser.id_telephone_number_user > 3 AND gender = 1 AND id_telephone_number > 0;
+        WHERE TelephoneNumberUser.id_telephone_number_user >= 0 AND gender = 1 AND id_telephone_number = 0;
 ---- 9.4 FULL OUTER JOIN двух таблиц
 		SELECT * FROM TelephoneNumber FULL OUTER JOIN TelephoneNumberUser ON TelephoneNumber.id_telephone_number = TelephoneNumberUser.id_telephone_number_user
 
 -- 10. Подзапросы
 ---- 10.1 Написать запрос с WHERE IN (подзапрос)
-		SELECT * FROM TelephoneNumberUser WHERE date_of_birth IN (22-08-1488-12-00-00, 22-08-2020-12-00-00);
+		SELECT * FROM TelephoneNumberUser WHERE date_of_birth IN ('2005-12-25T15:42:02.427', '2013-11-25T15:32:06.427');
 ---- 10.2 Написать запрос SELECT atr1, atr2, (подзапрос) FROM ...  
-		SELECT id_telephone_number_user, id_service_on_telephone_number, (SELECT id_payment FROM Payment WHERE price > 0) AS id_payment FROM Payment
+		SELECT id_telephone_number_user, f_name, l_name, (SELECT tariff FROM TelephoneNumber WHERE tariff = 'BulBulKarasik') AS tariff FROM TelephoneNumberUser
 
 
 
