@@ -22,6 +22,7 @@ PRIMARY KEY (id_telephone_number_user)
 GO
 
 INSERT INTO TelephoneNumberUser VALUES(0, 'Anton', 'Fecalis', 1, '2015-12-25T15:32:06.427');
+INSERT INTO TelephoneNumberUser VALUES(9, 'Anton', 'Sergey', 1, '2015-12-25T15:32:06.427');
 INSERT INTO TelephoneNumberUser VALUES(1, 'Misha', 'Ducalis', 1, '2014-12-25T15:32:06.427');
 INSERT INTO TelephoneNumberUser VALUES(2, 'Anya', 'Kurich', 0, '2013-11-25T15:32:06.427');
 INSERT INTO TelephoneNumberUser VALUES(3, 'Omae Va', 'Mu', 1, '2015-10-23T15:32:06.427');
@@ -42,6 +43,17 @@ place_of_registration varchar(50) NOT NULL,
 PRIMARY KEY (id_telephone_number)
 )
 GO
+
+INSERT INTO TelephoneNumber VALUES(0, 0, 0, +79877000000, 'MishaNaKrishe', 'Republic of Mari El');
+INSERT INTO TelephoneNumber VALUES(1, 0, 1, +79877000001, 'SeregaVDele', 'Republic of Dagestan');
+INSERT INTO TelephoneNumber VALUES(2, 1, 2, +79877000002, 'VasyaNakrasil', 'Nizhegorodsky Region');
+INSERT INTO TelephoneNumber VALUES(3, 1, 3, +79877000003, 'KuriniiKrilishek', 'Republic of Dagestan');
+INSERT INTO TelephoneNumber VALUES(4, 0, 4, +79877000004, '100Problem', 'Republic of Dagestan');
+INSERT INTO TelephoneNumber VALUES(5, 2, 5, +79877000005, 'SamyiLuchshii', 'Republic of Dagestan');
+INSERT INTO TelephoneNumber VALUES(6, 0, 6, +79877000006, 'SamyiHudshii', 'Nizhegorodsky Region');
+INSERT INTO TelephoneNumber VALUES(7, 3, 7, +79877000007, 'ObozhaiyBD', 'Republic of Mari El');
+INSERT INTO TelephoneNumber VALUES(8, 0, 8, +79877000008, 'AecheOOP', 'Republic of Mari El');
+INSERT INTO TelephoneNumber VALUES(9, 1, 9, +79877000009, 'IDazheBackend', 'Republic of Mari El');
 
 CREATE TABLE ServiceOnTelephoneNumber (
 id_service_on_telephone_number int NOT NULL,
@@ -146,7 +158,7 @@ GO
 ---- 10.1 Написать запрос с WHERE IN (подзапрос)
 		SELECT * FROM TelephoneNumberUser WHERE date_of_birth IN ('2005-12-25T15:42:02.427', '2013-11-25T15:32:06.427');
 ---- 10.2 Написать запрос SELECT atr1, atr2, (подзапрос) FROM ...  
-		SELECT id_telephone_number_user, f_name, l_name, (SELECT tariff FROM TelephoneNumber WHERE tariff = 'BulBulKarasik') AS tariff FROM TelephoneNumberUser
+		SELECT id_telephone_number_user, f_name, l_name, (SELECT tariff FROM TelephoneNumber WHERE id_telephone_number_user = id_telephone_number_user) AS tariff FROM TelephoneNumberUser
 
 
 
