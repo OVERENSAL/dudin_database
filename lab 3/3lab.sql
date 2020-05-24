@@ -30,7 +30,7 @@ INSERT INTO TelephoneNumberUser VALUES(4, 'Mers', 'BNW', 1, '2005-12-25T15:42:02
 INSERT INTO TelephoneNumberUser VALUES(5, 'BNW', 'M5', 1, '1995-12-25T15:32:06.427');
 INSERT INTO TelephoneNumberUser VALUES(6, 'Denis', 'Suhachyov', 1, '1985-12-25T14:32:06.427');
 INSERT INTO TelephoneNumberUser VALUES(7, 'Sasha', 'Citines', 1, '1923-12-15T15:32:06.427');
-INSERT INTO TelephoneNumberUser VALUES(8, 'Sashok', 'Mayonez', 1, '2005-02-31T15:32:06.427');
+INSERT INTO TelephoneNumberUser VALUES(8, 'Sashok', 'Mayonez', 1, '2005-02-28T15:32:06.427');
 
 
 CREATE TABLE TelephoneNumber (
@@ -158,7 +158,7 @@ GO
 ---- 10.1 Написать запрос с WHERE IN (подзапрос)
 		SELECT * FROM TelephoneNumberUser WHERE date_of_birth IN ('2005-12-25T15:42:02.427', '2013-11-25T15:32:06.427');
 ---- 10.2 Написать запрос SELECT atr1, atr2, (подзапрос) FROM ...  
-		SELECT id_telephone_number_user, f_name, l_name, (SELECT tariff FROM TelephoneNumber WHERE id_telephone_number_user = id_telephone_number_user) AS tariff FROM TelephoneNumberUser
+		SELECT id_telephone_number_user, f_name, l_name, (SELECT tariff FROM TelephoneNumber WHERE TelephoneNumber.id_telephone_number_user = TelephoneNumberUser.id_telephone_number_user) AS tariff FROM TelephoneNumberUser
 
 
 
