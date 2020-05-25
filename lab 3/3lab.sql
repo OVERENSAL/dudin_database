@@ -1,3 +1,4 @@
+Use TelephoneService
 CREATE DATABASE TelephoneService
 COLLATE Cyrillic_General_CI_AS
 
@@ -22,7 +23,6 @@ PRIMARY KEY (id_telephone_number_user)
 GO
 
 INSERT INTO TelephoneNumberUser VALUES(0, 'Anton', 'Fecalis', 1, '2015-12-25T15:32:06.427');
-INSERT INTO TelephoneNumberUser VALUES(9, 'Anton', 'Sergey', 1, '2015-12-25T15:32:06.427');
 INSERT INTO TelephoneNumberUser VALUES(1, 'Misha', 'Ducalis', 1, '2014-12-25T15:32:06.427');
 INSERT INTO TelephoneNumberUser VALUES(2, 'Anya', 'Kurich', 0, '2013-11-25T15:32:06.427');
 INSERT INTO TelephoneNumberUser VALUES(3, 'Omae Va', 'Mu', 1, '2015-10-23T15:32:06.427');
@@ -31,38 +31,59 @@ INSERT INTO TelephoneNumberUser VALUES(5, 'BNW', 'M5', 1, '1995-12-25T15:32:06.4
 INSERT INTO TelephoneNumberUser VALUES(6, 'Denis', 'Suhachyov', 1, '1985-12-25T14:32:06.427');
 INSERT INTO TelephoneNumberUser VALUES(7, 'Sasha', 'Citines', 1, '1923-12-15T15:32:06.427');
 INSERT INTO TelephoneNumberUser VALUES(8, 'Sashok', 'Mayonez', 1, '2005-02-28T15:32:06.427');
+INSERT INTO TelephoneNumberUser VALUES(9, 'Anton', 'Sergey', 1, '2015-12-25T15:32:06.427');
 
+drop table TelephoneNumber
 
 CREATE TABLE TelephoneNumber (
 id_telephone_number int NOT NULL,
-id_service_on_telephone_number int NOT NULL,
 id_telephone_number_user int NOT NULL,
 telephone_number varchar(12) NOT NULL,
-tariff varchar(50) NOT NULL,
+tariff varchar(50) NOT NULL,  
 place_of_registration varchar(50) NOT NULL,
 PRIMARY KEY (id_telephone_number)
 )
 GO
 
-INSERT INTO TelephoneNumber VALUES(0, 0, 0, +79877000000, 'MishaNaKrishe', 'Republic of Mari El');
-INSERT INTO TelephoneNumber VALUES(1, 0, 1, +79877000001, 'SeregaVDele', 'Republic of Dagestan');
-INSERT INTO TelephoneNumber VALUES(2, 1, 2, +79877000002, 'VasyaNakrasil', 'Nizhegorodsky Region');
-INSERT INTO TelephoneNumber VALUES(3, 1, 3, +79877000003, 'KuriniiKrilishek', 'Republic of Dagestan');
-INSERT INTO TelephoneNumber VALUES(4, 0, 4, +79877000004, '100Problem', 'Republic of Dagestan');
-INSERT INTO TelephoneNumber VALUES(5, 2, 5, +79877000005, 'SamyiLuchshii', 'Republic of Dagestan');
-INSERT INTO TelephoneNumber VALUES(6, 0, 6, +79877000006, 'SamyiHudshii', 'Nizhegorodsky Region');
-INSERT INTO TelephoneNumber VALUES(7, 3, 7, +79877000007, 'ObozhaiyBD', 'Republic of Mari El');
-INSERT INTO TelephoneNumber VALUES(8, 0, 8, +79877000008, 'AecheOOP', 'Republic of Mari El');
-INSERT INTO TelephoneNumber VALUES(9, 1, 9, +79877000009, 'IDazheBackend', 'Republic of Mari El');
+INSERT INTO TelephoneNumber VALUES(0, 0, +79877000000, 'MishaNaKrishe', 'Republic of Mari El');
+INSERT INTO TelephoneNumber VALUES(1, 1, +79877000001, 'SeregaVDele', 'Republic of Dagestan');
+INSERT INTO TelephoneNumber VALUES(2, 2, +79877000002, 'VasyaNakrasil', 'Nizhegorodsky Region');
+INSERT INTO TelephoneNumber VALUES(3, 3, +79877000003, 'KuriniiKrilishek', 'Republic of Dagestan');
+INSERT INTO TelephoneNumber VALUES(4, 4, +79877000004, '100Problem', 'Republic of Dagestan');
+INSERT INTO TelephoneNumber VALUES(5, 5, +79877000005, 'SamyiLuchshii', 'Republic of Dagestan');
+INSERT INTO TelephoneNumber VALUES(6, 6, +79877000006, 'SamyiHudshii', 'Nizhegorodsky Region');
+INSERT INTO TelephoneNumber VALUES(7, 7, +79877000007, 'ObozhaiyBD', 'Republic of Mari El');
+INSERT INTO TelephoneNumber VALUES(8, 8, +79877000008, 'AecheOOP', 'Republic of Mari El');
+INSERT INTO TelephoneNumber VALUES(9, 9, +79877000009, 'IDazheBackend', 'Republic of Mari El');
 
 CREATE TABLE ServiceOnTelephoneNumber (
 id_service_on_telephone_number int NOT NULL,
+id_telephone_number int NOT NULL,
 id_type_of_service int NOT NULL,
 name_of_service varchar(50) NOT NULL,
 price int NOT NULL,
 PRIMARY KEY (id_service_on_telephone_number)
 )
 GO
+
+drop table ServiceOnTelephoneNumber
+delete ServiceOnTelephoneNumber
+
+INSERT INTO ServiceOnTelephoneNumber VALUES(0, 0, 0, 'A', 100);
+INSERT INTO ServiceOnTelephoneNumber VALUES(1, 0, 1, 'B', 130);
+INSERT INTO ServiceOnTelephoneNumber VALUES(2, 0, 2, 'C', 140);
+INSERT INTO ServiceOnTelephoneNumber VALUES(3, 1, 3, 'D', 120);
+INSERT INTO ServiceOnTelephoneNumber VALUES(4, 1, 0, 'A', 130);
+INSERT INTO ServiceOnTelephoneNumber VALUES(5, 2, 0, 'A', 110);
+INSERT INTO ServiceOnTelephoneNumber VALUES(6, 3, 1, 'B', 120);
+INSERT INTO ServiceOnTelephoneNumber VALUES(7, 3, 0, 'A', 130);
+INSERT INTO ServiceOnTelephoneNumber VALUES(8, 4, 1, 'B', 110);
+INSERT INTO ServiceOnTelephoneNumber VALUES(9, 5, 0, 'A', 90);
+INSERT INTO ServiceOnTelephoneNumber VALUES(10, 5, 2, 'C',80);
+INSERT INTO ServiceOnTelephoneNumber VALUES(11, 6, 2, 'C', 700);
+INSERT INTO ServiceOnTelephoneNumber VALUES(12, 7, 3, 'D', 200);
+INSERT INTO ServiceOnTelephoneNumber VALUES(13, 8, 3, 'D', 300);
+INSERT INTO ServiceOnTelephoneNumber VALUES(14, 9, 3, 'D', 500);
 
 CREATE TABLE TypeOfService (
 id_type_of_service int NOT NULL,
@@ -71,9 +92,6 @@ number_of_services int NOT NULL,
 PRIMARY KEY (id_type_of_service)
 )
 GO
-
-
-
 
 -- 1.INSERT
 ---- 1.1 Без указания списка полей
@@ -125,21 +143,32 @@ GO
 
 -- 7. SELECT GROUP BY с функциями агрегации
 ----7.1 MIN
-		SELECT f_name, MIN(id_telephone_number_user) AS min_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name;
+		SELECT name_of_service, MIN(price) AS min_price FROM ServiceOnTelephoneNumber GROUP BY name_of_service;
 ----7.2 MAX
-		SELECT f_name, MAX(id_telephone_number_user) AS max_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name;
+		SELECT name_of_service, MAX(price) AS max_price FROM ServiceOnTelephoneNumber GROUP BY name_of_service;
 ----7.3 AVG
-		SELECT f_name, AVG(id_telephone_number_user) AS avg_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name;
+		SELECT name_of_service, AVG(price) AS avg_price FROM ServiceOnTelephoneNumber GROUP BY name_of_service;
 ----7.4 SUM 
-		SELECT f_name, SUM(id_telephone_number_user) AS sum_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name;
+		SELECT telephone_number, SUM(price) AS sum_price FROM TelephoneNumber
+		LEFT JOIN ServiceOnTelephoneNumber ON ServiceOnTelephoneNumber.id_telephone_number = TelephoneNumber.id_telephone_number
+		GROUP BY telephone_number;
 ----7.5 COUNT
-		SELECT f_name, COUNT(id_telephone_number_user) AS count_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name;
+		SELECT telephone_number, COUNT(id_service_on_telephone_number) AS count_of_services FROM TelephoneNumber
+		LEFT JOIN ServiceOnTelephoneNumber ON ServiceOnTelephoneNumber.id_telephone_number = TelephoneNumber.id_telephone_number
+		GROUP BY telephone_number;
 
 -- 8. SELECT GROUP BY + HAVING
 ----8.1 Написать 3 разных запроса с использованием GROUP BY + HAVING
-		SELECT f_name, MAX(id_telephone_number_user) AS max_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name HAVING MAX(id_telephone_number_user) > 30;
-		SELECT f_name, SUM(id_telephone_number_user) AS sum_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name HAVING SUM(id_telephone_number_user) > 2;
-		SELECT f_name, AVG(id_telephone_number_user) AS avg_id_telephone_number_user FROM TelephoneNumberUser GROUP BY f_name HAVING AVG(id_telephone_number_user) >= 27;
+		SELECT name_of_service, MAX(price) AS max_price FROM 
+		ServiceOnTelephoneNumber GROUP BY name_of_service HAVING MAX(price) > 200;
+
+		SELECT telephone_number, SUM(price) AS sum_price FROM TelephoneNumber
+		LEFT JOIN ServiceOnTelephoneNumber ON ServiceOnTelephoneNumber.id_telephone_number = TelephoneNumber.id_telephone_number
+		GROUP BY telephone_number HAVING SUM(price) < 200;
+
+		SELECT telephone_number, COUNT(id_service_on_telephone_number) AS count_of_services FROM TelephoneNumber
+		LEFT JOIN ServiceOnTelephoneNumber ON ServiceOnTelephoneNumber.id_telephone_number = TelephoneNumber.id_telephone_number
+		GROUP BY telephone_number HAVING COUNT(id_service_on_telephone_number) >= 2;
 
 -- 9. SELECT JOIN
 ---- 9.1 LEFT JOIN двух таблиц и WHERE по одному из атрибутов
@@ -158,7 +187,9 @@ GO
 ---- 10.1 Написать запрос с WHERE IN (подзапрос)
 		SELECT * FROM TelephoneNumberUser WHERE date_of_birth IN ('2005-12-25T15:42:02.427', '2013-11-25T15:32:06.427');
 ---- 10.2 Написать запрос SELECT atr1, atr2, (подзапрос) FROM ...  
-		SELECT id_telephone_number_user, f_name, l_name, (SELECT tariff FROM TelephoneNumber WHERE TelephoneNumber.id_telephone_number_user = TelephoneNumberUser.id_telephone_number_user) AS tariff FROM TelephoneNumberUser
+		SELECT id_telephone_number_user, f_name, l_name, 
+		(SELECT tariff FROM TelephoneNumber WHERE TelephoneNumber.id_telephone_number_user = TelephoneNumberUser.id_telephone_number_user) AS tariff FROM 
+		TelephoneNumberUser
 
 
 
