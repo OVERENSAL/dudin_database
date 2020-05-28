@@ -1,15 +1,12 @@
-ALTER TABLE room 
-		ADD FOREIGN KEY (id_hotel) REFERENCES hotel (id_hotel);
-ALTER TABLE room_in_booking
-		ADD FOREIGN KEY (id_room) REFERENCES room (id_room);
-ALTER TABLE room 
-		ADD FOREIGN KEY (id_room_category) REFERENCES room_category (id_room_category);
-ALTER TABLE room_in_booking
-		ADD FOREIGN KEY (id_booking) REFERENCES booking (id_booking);
-ALTER TABLE booking 
-		ADD FOREIGN KEY (id_client) REFERENCES client (id_client);
+use master
 
---Р’С‹РґР°С‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РєР»РёРµРЅС‚Р°С… РіРѕСЃС‚РёРЅРёС†С‹ вЂњРљРѕСЃРјРѕСЃвЂќ, РїСЂРѕР¶РёРІР°СЋС‰РёС… РІ РЅРѕРјРµСЂР°С… РєР°С‚РµРіРѕСЂРёРё вЂњР›СЋРєСЃвЂќ РЅР° 1 Р°РїСЂРµР»СЏ 2019Рі.
+ALTER TABLE room ADD FOREIGN KEY (id_hotel) REFERENCES hotel (id_hotel);
+ALTER TABLE room_in_booking ADD FOREIGN KEY (id_room) REFERENCES room (id_room);
+ALTER TABLE room ADD FOREIGN KEY (id_room_category) REFERENCES room_category (id_room_category);
+ALTER TABLE room_in_booking ADD FOREIGN KEY (id_booking) REFERENCES booking (id_booking);
+ALTER TABLE booking ADD FOREIGN KEY (id_client) REFERENCES client (id_client);
+
+--Выдать информацию о клиентах гостиницы “Космос”, проживающих в номерах категории “Люкс” на 1 апреля 2019г.
 
 SELECT client.id_client, client.name, client.phone FROM client
 LEFT JOIN booking ON client.id_client = booking.id_client
@@ -17,17 +14,17 @@ LEFT JOIN room_in_booking ON booking.id_booking = room_in_booking.id_room_in_boo
 LEFT JOIN room ON room_in_booking.id_room = room.id_room
 LEFT JOIN hotel ON room.id_hotel = hotel.id_hotel
 LEFT JOIN room_category ON room.id_room_category = room_category.id_room_category
-WHERE hotel.name = 'ГЉГ®Г±Г¬Г®Г±' AND room_category.name = 'Г‹ГѕГЄГ±' AND (room_in_booking.checkin_date <= '2019-04-01' AND room_in_booking.checkout_date > '2019-04-01');
+WHERE hotel.name = N'Космос' AND room_category.name = N'Люкс' AND (room_in_booking.checkin_date <= '2019-04-01' AND room_in_booking.checkout_date > '2019-04-01');
 
---Р”Р°С‚СЊ СЃРїРёСЃРѕРє СЃРІРѕР±РѕРґРЅС‹С… РЅРѕРјРµСЂРѕРІ РІСЃРµС… РіРѕСЃС‚РёРЅРёС† РЅР° 22 Р°РїСЂРµР»СЏ.
+--Дать список свободных номеров всех гостиниц на 22 апреля.
 
 SELECT room.id_hotel, room.id_room FROM room WHERE id_room NOT IN (
 	SELECT room.id_room FROM room_in_booking 
 	LEFT JOIN room ON room.id_room = room_in_booking.id_room
 	WHERE ('2019-04-22' BETWEEN room_in_booking.checkin_date AND room_in_booking.checkout_date))
-	ORDER BY id_room ASC
+ORDER BY id_hotel, id_room ASC
 
---Р”Р°С‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ РїСЂРѕР¶РёРІР°СЋС‰РёС… РІ РіРѕСЃС‚РёРЅРёС†Рµ вЂњРљРѕСЃРјРѕСЃвЂќ РЅР° 23 РјР°СЂС‚Р° РїРѕ РєР°Р¶РґРѕР№ РєР°С‚РµРіРѕСЂРёРё РЅРѕРјРµСЂРѕРІ
+--Дать количество проживающих в гостинице “Космос” на 23 марта по каждой категории номеров
 
 SELECT COUNT(room_in_booking.id_room) AS clients,
 	(SELECT name FROM room_category AS category WHERE category.id_room_category = room_category.id_room_category) AS
@@ -37,11 +34,11 @@ SELECT COUNT(room_in_booking.id_room) AS clients,
 	LEFT JOIN hotel ON hotel.id_hotel = room.id_hotel
 	LEFT JOIN room_category ON room_category.id_room_category = room.id_room_category
 	WHERE
-		hotel.name = 'ГЉГ®Г±Г¬Г®Г±' AND ('2019-03-23' BETWEEN room_in_booking.checkin_date AND room_in_booking.checkout_date)
+		hotel.name = N'Космос' AND ('2019-03-23' BETWEEN room_in_booking.checkin_date AND room_in_booking.checkout_date)
 	GROUP BY
 	    room_category.id_room_category
 
---Р”Р°С‚СЊ СЃРїРёСЃРѕРє РїРѕСЃР»РµРґРЅРёС… РїСЂРѕР¶РёРІР°РІС€РёС… РєР»РёРµРЅС‚РѕРІ РїРѕ РІСЃРµРј РєРѕРјРЅР°С‚Р°Рј РіРѕСЃС‚РёРЅРёС†С‹ вЂњРљРѕСЃРјРѕСЃвЂќ, РІС‹РµС…Р°РІС€РёРј РІ Р°РїСЂРµР»Рµ СЃ СѓРєР°Р·Р°РЅРёРµРј РґР°С‚С‹ РІС‹РµР·РґР°
+--Дать список последних проживавших клиентов по всем комнатам гостиницы “Космос”, выехавшим в апреле с указанием даты выезда
 
 SELECT client.name, client.phone, room_in_booking.checkout_date FROM client
 LEFT JOIN booking ON booking.id_client = client.id_client 
@@ -53,34 +50,33 @@ INNER JOIN room ON room_in_booking.id_room = room.id_room
 WHERE (room_in_booking.id_room = booking_room.id_room AND booking_room.max_checkout_date = room_in_booking.checkout_date AND room.id_hotel = 1)
 ORDER BY room.id_room
 
---РџСЂРѕРґР»РёС‚СЊ РЅР° 2 РґРЅСЏ РґР°С‚Сѓ РїСЂРѕР¶РёРІР°РЅРёСЏ РІ РіРѕСЃС‚РёРЅРёС†Рµ вЂњРљРѕСЃРјРѕСЃвЂќ РІСЃРµРј РєР»РёРµРЅС‚Р°Рј РєРѕРјРЅР°С‚ РєР°С‚РµРіРѕСЂРёРё вЂњР‘РёР·РЅРµСЃвЂќ, РєРѕС‚РѕСЂС‹Рµ Р·Р°СЃРµР»РёР»РёСЃСЊ 10 РјР°СЏ.
+--Продлить на 2 дня дату проживания в гостинице “Космос” всем клиентам комнат категории “Бизнес”, которые заселились 10 мая.
 
 UPDATE room_in_booking
 SET checkout_date = DATEADD(day, 2, checkout_date)
 FROM room
 	INNER JOIN room_category ON room_category.id_room_category = room.id_room_category
 	INNER JOIN hotel ON hotel.id_hotel = room.id_hotel
-WHERE hotel.name = 'ГЉГ®Г±Г¬Г®Г±' AND room_category.name = 'ГЃГЁГ§Г­ГҐГ±' AND room_in_booking.checkin_date = '2019-05-10'
+WHERE hotel.name = N'Космос' AND room_category.name = N'Бизнес' AND room_in_booking.checkin_date = '2019-05-10'
 
---РќР°Р№С‚Рё РІСЃРµ "РїРµСЂРµСЃРµРєР°СЋС‰РёРµСЃСЏ" РІР°СЂРёР°РЅС‚С‹ РїСЂРѕР¶РёРІР°РЅРёСЏ.
+--Найти все "пересекающиеся" варианты проживания.
 
 SELECT * FROM room_in_booking
-INNER JOIN room_in_booking AS room_in_booking2 ON room_in_booking.id_room = room_in_booking.id_room 
+INNER JOIN room_in_booking AS room_in_booking2 ON room_in_booking.id_room = room_in_booking2.id_room 
 WHERE 
-	room_in_booking.id_room = room_in_booking2.id_room AND
 	room_in_booking.id_room_in_booking != room_in_booking2.id_room_in_booking AND 
 	(room_in_booking.checkin_date <= room_in_booking2.checkin_date AND room_in_booking2.checkin_date < room_in_booking.checkout_date)
 ORDER BY room_in_booking.id_room_in_booking
 
---РЎРѕР·РґР°С‚СЊ Р±СЂРѕРЅРёСЂРѕРІР°РЅРёРµ РІ С‚СЂР°РЅР·Р°РєС†РёРё
+--Создать бронирование в транзакции
 
 BEGIN TRANSACTION
-	INSERT INTO client VALUES ('ГЏГіГЇГЄГЁГ­ Г‹ГіГЇГ  ГѓГҐГ­Г­Г Г¤ГјГҐГўГЁГ·', '3(224)228334')
+	INSERT INTO client VALUES (N'Дудин Николай Александрович', '3(224)228334')
 	INSERT INTO booking VALUES (SCOPE_IDENTITY(), '2020-05-12')
 	INSERT INTO room_in_booking VALUES(SCOPE_IDENTITY(), 54, '2020-05-12', '2020-05-13')
 COMMIT;
 
---РРЅРґРµРєСЃС‹
+--Индексы
 
 CREATE NONCLUSTERED INDEX [IX_booking_id_client] ON booking (id_client)
 CREATE NONCLUSTERED INDEX [IX_client_name] ON client (name)
