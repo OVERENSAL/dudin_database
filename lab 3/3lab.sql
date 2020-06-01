@@ -177,15 +177,18 @@ GO
 		SELECT * FROM TelephoneNumber RIGHT JOIN TelephoneNumberUser ON TelephoneNumberUser.id_telephone_number_user = TelephoneNumber.id_telephone_number_user WHERE l_name = 'BNW';
 ---- 9.3 LEFT JOIN трех таблиц + WHERE по атрибуту из каждой таблицы
 		SELECT TelephoneNumberUser.id_telephone_number_user, TelephoneNumberUser.f_name, TelephoneNumberUser.gender, TelephoneNumber.id_telephone_number, TelephoneNumber.tariff, Payment.id_payment, Payment.date
-		FROM
-				TelephoneNumberUser LEFT JOIN TelephoneNumber ON TelephoneNumberUser.id_telephone_number_user = TelephoneNumber.id_telephone_number_user LEFT JOIN Payment ON TelephoneNumberUser.id_telephone_number_user = TelephoneNumber.id_telephone_number
+		FROM TelephoneNumberUser 
+		LEFT JOIN TelephoneNumber ON TelephoneNumberUser.id_telephone_number_user = TelephoneNumber.id_telephone_number_user 
+		LEFT JOIN Payment ON TelephoneNumberUser.id_telephone_number_user = TelephoneNumber.id_telephone_number
         WHERE TelephoneNumberUser.id_telephone_number_user >= 0 AND gender = 1 AND id_telephone_number = 0;
 ---- 9.4 FULL OUTER JOIN двух таблиц
 		SELECT * FROM TelephoneNumber FULL OUTER JOIN TelephoneNumberUser ON TelephoneNumber.id_telephone_number = TelephoneNumberUser.id_telephone_number_user
 
 -- 10. Подзапросы
 ---- 10.1 Написать запрос с WHERE IN (подзапрос)
-		SELECT * FROM TelephoneNumberUser WHERE date_of_birth IN ('2005-12-25T15:42:02.427', '2013-11-25T15:32:06.427');
+		SELECT * FROM TelephoneNumber
+		LEFT JOIN ServiceOnTelephoneNumber ON ServiceOnTelephoneNumber.id_telephone_number = TelephoneNumber.id_telephone_number
+		WHERE TelephoneNumber.id_telephone_number IN (SELECT id_telephone_number FROM ServiceOnTelephoneNumber WHERE price > 200)
 ---- 10.2 Написать запрос SELECT atr1, atr2, (подзапрос) FROM ...  
 		SELECT id_telephone_number_user, f_name, l_name, 
 		(SELECT tariff FROM TelephoneNumber WHERE TelephoneNumber.id_telephone_number_user = TelephoneNumberUser.id_telephone_number_user) AS tariff FROM 
